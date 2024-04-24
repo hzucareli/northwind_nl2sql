@@ -1,0 +1,5 @@
+{
+  "id": 4,
+  "question": "Quais são os clientes que mais compraram?",
+  "query": "SELECT c.id, c.company, COUNT(od.id) as total_orders\nFROM customers c\nJOIN orders o ON c.id = o.customer_id\nJOIN order_details od ON o.id = od.order_id\nWHERE od.status_id IN (2, 3, 4) -- Allocated, Invoiced, Shipped\nGROUP BY c.id, c.company\nORDER BY total_orders DESC;"
+}

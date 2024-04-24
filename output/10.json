@@ -1,0 +1,5 @@
+{
+  "id": 10,
+  "question": "Qual o ticket médio por compra?",
+  "query": "SELECT AVG(od.quantity * od.unit_price) AS ticket_medio\nFROM orders o\nJOIN order_details od ON o.id = od.order_id\nWHERE o.status_id IN (2, 3)\nAND od.status_id IN (1, 2, 3);"
+}

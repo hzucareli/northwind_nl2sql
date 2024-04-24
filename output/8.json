@@ -1,0 +1,5 @@
+{
+  "id": 8,
+  "question": "Qual é o valor total de todas as vendas realizadas por ano?",
+  "query": "SELECT YEAR(order_date) AS year, SUM(unit_price * quantity) AS total_sales\nFROM orders o\nJOIN order_details od ON o.id = od.order_id\nWHERE o.status_id IN (2, 3) \nAND od.status_id IN (1, 2, 3)\nGROUP BY YEAR(order_date);"
+}

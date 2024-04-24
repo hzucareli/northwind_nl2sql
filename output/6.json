@@ -1,0 +1,5 @@
+{
+  "id": 6,
+  "question": "Quais são os fornecedores mais frequentes nos pedidos?",
+  "query": "SELECT suppliers.company, COUNT(*) as total_orders\nFROM suppliers\nJOIN products ON suppliers.id = products.supplier_ids\nJOIN order_details ON products.id = order_details.product_id\nJOIN orders ON order_details.order_id = orders.id\nWHERE orders.status_id IN (2, 3) \nAND order_details.status_id IN (1, 2, 3)\nGROUP BY suppliers.company\nORDER BY total_orders DESC;"
+}

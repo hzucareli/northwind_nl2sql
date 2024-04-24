@@ -1,0 +1,5 @@
+{
+  "id": 5,
+  "question": "Quais são os produtos mais caros da loja?",
+  "query": "SELECT product_name, list_price \nFROM products \nORDER BY list_price DESC \nLIMIT 5;"
+}

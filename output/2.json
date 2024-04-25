@@ -1,5 +1,5 @@
 {
   "id": 2,
   "question": "Quais são os produtos mais vendidos em termos de quantidade?",
-  "query": "SELECT product_id, SUM(quantity) as total_quantity\nFROM order_details\nWHERE status_id IN (2, 3, 4) -- Allocated, Invoiced, Shipped\nGROUP BY product_id\nORDER BY total_quantity DESC;"
+  "query": "SELECT product_id, SUM(quantity) AS total_quantity\nFROM order_details\nWHERE status_id IN (2, 3, 4) -- Allocated, Invoiced, Shipped\nGROUP BY product_id\nORDER BY total_quantity DESC;"
 }

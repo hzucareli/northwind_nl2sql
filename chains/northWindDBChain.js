@@ -4,8 +4,6 @@ import {
 } from '@langchain/core/runnables'
 import { PromptTemplate } from '@langchain/core/prompts'
 import { StringOutputParser } from '@langchain/core/output_parsers'
-import { createSqlQueryChain } from "langchain/chains/sql_db";
-
 
 const northWindDBChain = ({ llm, db }) => {
   console.log('using northWindDBChain')
@@ -44,48 +42,4 @@ SQL Query:`)
   return sqlQueryGeneratorChain
 }
 
-
-const naturalLanguageChain = ({ llm, db, originalChain }) => {
-  console.log('using northWindDBChain with natural language response')
-  const finalResponsePrompt = PromptTemplate.fromTemplate(`Based on the table schema below, question, sql query, and sql response, write a natural language response:
-{schema}
-
-Question: {question}
-SQL Query: {query}
-SQL Response: {response}`)
-
-  const chain = RunnableSequence.from([
-    RunnablePassthrough.assign({
-      query: originalChain
-    }),
-    {
-      schema: async () => db.getTableInfo(),
-      question: (input) => input.question,
-      query: (input) => input.query,
-      response: (input) => db.run(input.query)
-    },
-    finalResponsePrompt,
-    llm
-  ])
-
-  return chain
-}
-
-const getChain = async ({ llm, db }, chainType = 'specialized') => {
-  switch (chainType) {
-    case 'specialized':
-      return northWindDBChain({ llm, db })
-    case 'specialized:results-nl':
-      const orignalChain = await getChain({ llm, db }, 'specialized')
-      return naturalLanguageChain({ llm, db, originalChain: orignalChain })
-    default:
-      return await createSqlQueryChain({ llm, db, dialect: 'mysql' })
-  }
-}
-
-
-export {
-  getChain,
-  northWindDBChain,
-  naturalLanguageChain
-}
+export default northWindDBChain

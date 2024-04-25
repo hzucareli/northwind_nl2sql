@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev": "nodemon runQuestions.js",
+    "start": "node runQuestions.js --no-color > output/results.log",
     "lint": "eslint . --ignore-pattern=\".playground/*\"",
     "lint:fix": "eslint . --fix --ignore-pattern=\".playground/*\"",
     "test": "echo \"Error: no test specified\" && exit 1"

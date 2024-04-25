@@ -1,5 +1,5 @@
 {
   "id": 7,
   "question": "Quais os melhores vendedores?",
-  "query": "SELECT e.first_name, e.last_name, COUNT(od.id) as total_sales\nFROM employees e\nJOIN orders o ON e.id = o.employee_id\nJOIN order_details od ON o.id = od.order_id\nJOIN orders_status os ON o.status_id = os.id\nJOIN order_details_status ods ON od.status_id = ods.id\nWHERE os.id IN (2, 3) AND ods.id IN (1, 2, 3)\nGROUP BY e.first_name, e.last_name\nORDER BY total_sales DESC;"
+  "query": "SELECT e.first_name, e.last_name, COUNT(od.id) as total_sales\nFROM employees e\nJOIN orders o ON e.id = o.employee_id\nJOIN order_details od ON o.id = od.order_id\nJOIN orders_status os ON o.status_id = os.id\nJOIN order_details_status ods ON od.status_id = ods.id\nWHERE os.id IN (2, 3) AND ods.id IN (1, 2, 3)\nGROUP BY e.id\nORDER BY total_sales DESC;"
 }

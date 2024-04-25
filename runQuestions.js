@@ -13,8 +13,8 @@ import { getEnv } from './utils.js'
 import * as utils from './utils.js'
 import { mkdirp } from 'mkdirp'
 
-import { NLQuery } from './NLQuery.js'
-import { getChain } from './chainnorthwind.js'
+import { NLQuery } from './lib/NLQuery.js'
+import { getChain } from './chains/index.js'
 
 const datasource = new DataSource({
   type: 'mysql',
@@ -65,28 +65,38 @@ const chainType = returnNLResults ? 'specialized:results-nl' : 'specialized'
 // specialized:results-nl | specialized | basic
 const chain = await getChain({ llm, db }, chainType)
 
-const nlq = new NLQuery({ db, llm, chain: chain })
+const nlq = new NLQuery({ db, llm, chain })
 
-for (const { id, question } of questions) {
-  const sql = await nlq.generateQuery(question)
+let exitCode = 0
 
-  console.log(''.padStart(80, '=~'))
-  console.log(`Questáo ${id}: ${question.yellow}`)
-  console.log(utils.padCenter('SQL Gerado', 80, '~'))
-  console.log(sql)
+try {
+  for (const { id, question } of questions) {
+    const sql = await nlq.generateQuery(question)
 
-  const outputData = {
-    id,
-    question,
-    query: sql
+    console.log(''.padStart(80, '=~'))
+    console.log(`Questáo ${id}: ${question.yellow}`)
+    console.log(utils.padCenter('SQL Gerado', 80, '~'))
+    console.log(sql)
+
+    const outputData = {
+      id,
+      question,
+      query: sql
+    }
+
+    if (doExecuteQuery) {
+      const res = await nlq.runQuery(sql)
+      outputData.result = res
+    }
+
+    await fs.writeFile(`${PATH_OUTPUT_FILES}/${id}.json`, JSON.stringify(outputData, null, 2))
   }
-
-  if (doExecuteQuery) {
-    const res = await nlq.runQuery(sql)
-    outputData.result = res
-  }
-
-  await fs.writeFile(`${PATH_OUTPUT_FILES}/${id}.json`, JSON.stringify(outputData, null, 2))
+} catch (err) {
+  console.error(err)
+  exitCode = 1
+  console.log(utils.padCenter('ERRO', 80, '='))
 }
 
 console.log(utils.padCenter('FIM', 80, '='))
+
+process.exit(exitCode)

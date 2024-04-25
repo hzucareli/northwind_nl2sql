@@ -1,5 +1,5 @@
 {
   "id": 1,
   "question": "Quais são os produtos mais populares entre os clientes corporativos?",
-  "query": "SELECT product_id, COUNT(*) as total_sales\nFROM order_details od\nJOIN orders o ON od.order_id = o.id\nJOIN customers c ON o.customer_id = c.id\nWHERE c.company IS NOT NULL\nAND o.status_id IN (2, 3)\nAND od.status_id IN (1, 2, 3)\nGROUP BY product_id\nORDER BY total_sales DESC;"
+  "query": "SELECT product_id, COUNT(product_id) AS total_sales\nFROM order_details od\nJOIN orders o ON od.order_id = o.id\nJOIN customers c ON o.customer_id = c.id\nWHERE c.company IS NOT NULL\nAND o.status_id IN (2, 3)\nAND od.status_id IN (1, 2, 3)\nGROUP BY product_id\nORDER BY total_sales DESC;"
 }

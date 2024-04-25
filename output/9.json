@@ -1,5 +1,5 @@
 {
   "id": 9,
   "question": "Qual é o valor total de vendas por categoria de produto?",
-  "query": "SELECT p.category, SUM(od.quantity * od.unit_price) AS total_sales\nFROM order_details od\nJOIN products p ON od.product_id = p.id\nJOIN orders o ON od.order_id = o.id\nWHERE o.status_id IN (2, 3) \nAND od.status_id IN (1, 2, 3)\nGROUP BY p.category;"
+  "query": "SELECT p.category, SUM(od.quantity * od.unit_price) AS total_sales\nFROM orders o\nJOIN order_details od ON o.id = od.order_id\nJOIN products p ON od.product_id = p.id\nJOIN orders_status os ON o.status_id = os.id\nJOIN order_details_status ods ON od.status_id = ods.id\nWHERE os.id IN (2, 3) AND ods.id IN (1, 2, 3)\nGROUP BY p.category;"
 }
